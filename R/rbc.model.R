@@ -1,10 +1,10 @@
-# Generated on 2023-01-06 17:09:51 by gEcon ver. 1.1.0 (2018-03-11)
+# Generated on 2023-01-09 17:43:08 by gEcon ver. 1.1.0 (2018-03-11)
 # http://gecon.r-forge.r-project.org/
 
 # Model name: rbc
 
 # info
-info__ <- c("rbc", "C:/Users/sebas/Documents/R package/svarCAL/R/rbc.gcn", "2023-01-06 17:09:51")
+info__ <- c("rbc", "C:/Users/sebas/Documents/R package/svarCAL/R/rbc.gcn", "2023-01-09 17:43:08")
 
 # index sets
 index_sets__ <- list()
