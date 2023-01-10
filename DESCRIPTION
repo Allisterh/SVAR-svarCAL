@@ -16,6 +16,13 @@ Suggests:
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/testthat/edition: 3
-Depends: dplyr, tidyr, pwr, Matrix, gEcon
-Additional_repositories: https://gecon.r-forge.r-project.org/
-Imports: 
+Depends: 
+    dplyr,
+    tidyr,
+    pwr,
+    Matrix,
+    gEcon,
+    vars,
+    fastICA,
+    R (>= 2.10)
+Additional_repositories: 
