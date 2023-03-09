@@ -24,7 +24,6 @@ Depends:
     gEcon,
     vars,
     fastICA,
-<<<<<<< HEAD
     permutations,
     gtools,
     rlang,
@@ -32,7 +31,4 @@ Depends:
     matrixStats,
     purrr,
     matrixcalc
-=======
-    R (>= 2.10)
->>>>>>> db9decac9dac53df4c15a63350c5bf2f72cc7704
 Additional_repositories: 
