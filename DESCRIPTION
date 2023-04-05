@@ -30,5 +30,6 @@ Depends:
     pracma,
     matrixStats,
     purrr,
-    matrixcalc
+    matrixcalc,
+    lpSolve
 Additional_repositories: 

@@ -14,21 +14,6 @@ MDI <- function(phi_mod, phi_emp) {
   L <- length(phi_emp)
 
 
-  #create set of all P
-  g <- diag(K)
-  perms <- permutations(K,K)
-  pairings <- expand.grid(1:nrow(perms))
-  P_all <- lapply(1:nrow(pairings), function(x) g[perms[pairings[x,1],],])
-
-  #create set of all J
-  signs <- expand.grid(replicate(K, c(1,-1), simplify=FALSE))
-  J_all <- lapply(1:nrow(signs), function(x) matrix(diag(signs[x,]), ncol = K))
-
-
-  #create set of all C
-  C_all <- flatten(lapply(P_all, function(x) lapply(J_all, function(y) x %*% y )))
-
-
   #calculate MDI
   frob_value <- new.env()
   Q <- lapply(phi_mod, function(q) {
@@ -42,17 +27,12 @@ MDI <- function(phi_mod, phi_emp) {
 
         if (length(x[[y]]) == K*K & length(phi_emp) == length(x) & !any(is.na(x[[y]]))) {
           if (y == 1) {
-            result <- sapply(C_all, function(z) {
 
-              frobenius.norm(x[[y]] %*% z - phi_emp[[y]]) #what about (1/sqrt(K-1))?
-
-            })
-            frob_value$t <- C_all[[which.min(result)]] #store sign order matrix that minimizes result
-
-            min(result)
+              frob_value$t <- signperm_matrix(x[[y]], phi_emp[[y]]) #compute optimal sign perm matrix
+              frobenius.norm(x[[y]] %*% frob_value$t - phi_emp[[y]]) #what about (1/sqrt(K-1))
 
           } else {
-            frobenius.norm(x[[y]] %*% frob_value$t - phi_emp[[y]]) #caluclate MDI for the lags
+              frobenius.norm(x[[y]] %*% frob_value$t - phi_emp[[y]]) #caluclate MDI for the lags
           }
 
         } else {
@@ -83,6 +63,25 @@ MDI <- function(phi_mod, phi_emp) {
   return(Q)
 }
 
+
+#' Compute optimal sign permutation matrix using linear assignment alogrithm
+#'
+#' @param A n by n matrix such that ||AP-B||f
+#' @param B n by n matrix such that ||AP-B||f
+#'
+#' @return
+#' @export
+#'
+#' @examples
+signperm_matrix <- function(A, B) {
+  D_plus <- t(A) %*% B #compute cost matrix D if A is positive, each matrix entry is the multiplication between a column of A and a column of B (one entry for each combination of A and B)
+  D_min <- t(-A) %*% B #compute cost matrix D  if A is negative
+  D <- D_plus*(D_plus >= D_min) + D_min * (D_min > D_plus) # select those elements of D_plus and D_min that are the highest into a new matrix D
+  sign_change <- 1 * (D_plus >= D_min) + (-1) * (D_min > D_plus) #track which elements are from D_plus and D_minus
+  P <- lp.assign(-D)$solution #use linear assignment algo to determine permutation matrix that maximizes the cost matrix (algorithm minimizes by default so -D)
+  perm_sign <- P *  sign_change #change sign of permutation matrix if element came from D_min
+  return(perm_sign)
+}
 
 
 #' p_values
