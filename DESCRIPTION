@@ -21,7 +21,6 @@ Depends:
     tidyr,
     pwr,
     Matrix,
-    gEcon,
     vars,
     fastICA,
     permutations,
