@@ -2,19 +2,26 @@
 % Please edit documentation in R/module_1.R
 \name{sample_size}
 \alias{sample_size}
-\title{Sample size}
+\title{Sample size function}
 \usage{
 sample_size(sample_number, effect_size = 0.1, sigma = 0.01, power_test = 0.95)
 }
 \arguments{
-\item{sample_number}{number of parameter samples used}
+\item{sample_number}{Number of parameter samples used.}
 
-\item{effect_size}{set to conservative default of 0.1}
+\item{effect_size}{Effect size, set to conservative default value of 0.1.}
 
 \item{sigma}{significance level, set to default of 0.01}
 
 \item{power_test}{power of ANAVO test, set to default of 0.95}
 }
+\value{
+Numerical value indicating the minimum sample size given the inputs.
+}
 \description{
-Function to calculate sample following Seri & Secchi (2017)
+Function to calculate the minimum sample size following Seri & Secchi (2017).
+}
+\examples{
+sample_size(100)
+
 }

@@ -2,24 +2,24 @@
 % Please edit documentation in R/module_1.R
 \name{model_data}
 \alias{model_data}
-\title{Model Data Function}
+\title{Model data generating function}
 \usage{
 model_data(model, param_space, sample_number, runs, T)
 }
 \arguments{
-\item{model}{function representing the theoretical model to be calibrated}
+\item{model}{Function representing the theoretical model to be calibrated.}
 
-\item{param_space}{a matrix consisting of two columns with the minimum and maximum value for each parameter}
+\item{param_space}{A matrix consisting of two columns with the minimum and maximum value for each parameter.}
 
-\item{sample_number}{number of samples to draw from the parameter space}
+\item{sample_number}{Number of samples to draw from the parameter space.}
 
-\item{runs}{the number of runs per parameter sample}
+\item{runs}{The number of runs per parameter sample.}
 
-\item{T}{number of time periods to generate}
+\item{T}{Number of time periods to generate.}
 }
 \value{
-a matrix containing the model data for the specified number of runs and samples
+A list of list of data frames containing the model data for the specified number of runs and samples.
 }
 \description{
-Function to generate the model data for multiple samples of the parameter space and multiple runs
+Function to generate the model data for multiple samples of the parameter space and multiple runs.
 }

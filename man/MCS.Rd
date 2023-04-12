@@ -11,9 +11,12 @@ MCS(MDI_matrix, fun_p = p_values, fun_el = elim, dA = dA)
 
 \item{fun_p}{function to determine p-value}
 
-\item{fun_el}{elemination rule}
+\item{fun_el}{elimination rule}
 
 \item{dA}{significance threshold}
+}
+\value{
+Model confidence set of one lagged component.
 }
 \description{
 Function to determine the model confidence set and p-values

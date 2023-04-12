@@ -4,12 +4,21 @@
 \alias{MCS_list}
 \title{MSC_list}
 \usage{
-MCS_list(MDI_matrix_list, dA = 1)
+MCS_list(MDI_matrix_list, ...)
 }
 \arguments{
 \item{MDI_matrix_list}{list of MDI matrices}
 
-\item{dA}{significance level default dA=1 selet best cop}
+\item{...}{
+  Arguments passed on to \code{\link[=MCS]{MCS}}
+  \describe{
+    \item{\code{dA}}{significance threshold}
+    \item{\code{fun_p}}{function to determine p-value}
+    \item{\code{fun_el}}{elimination rule}
+  }}
+}
+\value{
+List of lagged components consisting of the model confidence sets.
 }
 \description{
 Computes the minimal confidence set of list of MDI matrices

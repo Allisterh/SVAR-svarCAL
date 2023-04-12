@@ -2,13 +2,16 @@
 % Please edit documentation in R/module_3.R
 \name{resid_model}
 \alias{resid_model}
-\title{resid_model}
+\title{Residual function of model estimated VAR}
 \usage{
 resid_model(var_est)
 }
 \arguments{
-\item{var_est}{VAR estimate based on model data}
+\item{var_est}{List of list of VAR estimates based on model data.}
+}
+\value{
+List of lists of dataframes of residuals of VAR estimation
 }
 \description{
-Calculate the residuals based on the VAR estimate of the model data
+Calculate the residuals based on the VAR estimate of the model data.
 }

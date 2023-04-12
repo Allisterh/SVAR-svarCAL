@@ -2,17 +2,20 @@
 % Please edit documentation in R/module_3.R
 \name{lag_MA_components}
 \alias{lag_MA_components}
-\title{lag_MA_components}
+\title{Moving average components function}
 \usage{
 lag_MA_components(var_est, Mixmat, maxlag = 5)
 }
 \arguments{
-\item{var_est}{result of estimated VAR model}
+\item{var_est}{Result of estimated VAR model.}
 
-\item{Mixmat}{estimated mixing matrix of contemporanous effects}
+\item{Mixmat}{Estimated mixing matrix of contemporaneous effects.}
 
-\item{maxlag}{nubmer of lagged coefficient to compute}
+\item{maxlag}{Number of lagged coefficients to compute, default is set to 5.}
+}
+\value{
+List of laged component matrices.
 }
 \description{
-Function to extract the coefficients of  lagged componenets of the moving average represenetation of the VAR model
+Function to extract the coefficients of lagged components of the moving average representation of the VAR model.
 }

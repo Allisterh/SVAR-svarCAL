@@ -1,14 +1,14 @@
-#' Model Data Function
+#' Model data generating function
 #'
-#' Function to generate the model data for multiple samples of the parameter space and multiple runs
+#' Function to generate the model data for multiple samples of the parameter space and multiple runs.
 #'
-#' @param model function representing the theoretical model to be calibrated
-#' @param param_space a matrix consisting of two columns with the minimum and maximum value for each parameter
-#' @param sample_number number of samples to draw from the parameter space
-#' @param runs the number of runs per parameter sample
-#' @param T number of time periods to generate
+#' @param model Function representing the theoretical model to be calibrated.
+#' @param param_space A matrix consisting of two columns with the minimum and maximum value for each parameter.
+#' @param sample_number Number of samples to draw from the parameter space.
+#' @param runs The number of runs per parameter sample.
+#' @param T Number of time periods to generate.
 #'
-#' @return a matrix containing the model data for the specified number of runs and samples
+#' @return A list of list of data frames containing the model data for the specified number of runs and samples.
 #' @export
 model_data <- function(model, param_space, sample_number, runs, T){
   # Make sure 'bounds' is a matrix with 2 columns
@@ -25,7 +25,7 @@ model_data <- function(model, param_space, sample_number, runs, T){
   data_list <- list()
   data_list <- apply(samples, 1, function(y){
     tryCatch(
-      lapply(1:20, function(z){
+      lapply(runs, function(z){
         model(T,y)}), error = function(err) NA)
 
   })
@@ -33,26 +33,28 @@ model_data <- function(model, param_space, sample_number, runs, T){
   return(data_list)
 }
 
-#space <- rbind(c(0.025*0.99, 0.025*1.01), c(0.99*0.99, 0.99*1.01), c(2*0.99, 2*1.01), c(0.3*1, 1*0.3), c(1*0.95, 1*0.95))
-#test <- model_data(model = demo_model, param_space = space, sample_number = 5, runs = 10, T = 50)
 
 
-#' Sample size
+
+#' Sample size function
 #'
-#' Function to calculate sample following Seri & Secchi (2017)
+#' Function to calculate the minimum sample size following Seri & Secchi (2017).
 #'
-#' @param sample_number number of parameter samples used
-#' @param effect_size set to conservative default of 0.1
+#' @param sample_number Number of parameter samples used.
+#' @param effect_size Effect size, set to conservative default value of 0.1.
 #' @param sigma significance level, set to default of 0.01
 #' @param power_test power of ANAVO test, set to default of 0.95
 #'
-#' @return
-#' @export
+#' @return Numerical value indicating the minimum sample size given the inputs.
 #'
 #' @examples
+#' sample_size(100)
+#'
+#' @export
 sample_size <- function(sample_number , effect_size = 0.1, sigma = 0.01, power_test = 0.95){
 
   result <- pwr.anova.test(k = sample_number, n = NULL, f = effect_size, sig.level = sigma, power = power_test)
+  return(ceiling(result$n))
 }
 
 

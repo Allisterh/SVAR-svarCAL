@@ -1,13 +1,12 @@
-#' MDI
+#' Minimal distance index function
 #'
-#'Function to calculate the Minimal Dinstance Index (MDI) between the estimates of the model mixing matrix and the real world mixing matrix
+#'Function to calculate the Minimal Dinstance Index (MDI) between the estimates of the model mixing matrix and the real world mixing matrix. The distance measure is the frobenius norm.
+#'
 #' @param phi_mod MA representation of model data VAR
 #' @param phi_emp MA representation of empirical data VAR
 #'
-#' @return
+#' @return List of lagged components each consisting of a list with parameter settings consisting of dataframes with frobenius distances for each run.
 #' @export
-#'
-#' @examples
 MDI <- function(phi_mod, phi_emp) {
 
   K <- ncol(phi_emp[[1]])
@@ -64,15 +63,15 @@ MDI <- function(phi_mod, phi_emp) {
 }
 
 
-#' Compute optimal sign permutation matrix using linear assignment alogrithm
+#' Sign permutation function
 #'
-#' @param A n by n matrix such that ||AP-B||f
-#' @param B n by n matrix such that ||AP-B||f
+#' Compute optimal sign permutation matrix using linear assignment algorithm.
 #'
-#' @return
+#' @param A n by n matrix such that ||AP-B||f.
+#' @param B n by n matrix such that ||AP-B||f.
+#'
+#' @return Sign permutation matrix that minimizes the frobenius norm between A and B
 #' @export
-#'
-#' @examples
 signperm_matrix <- function(A, B) {
   D_plus <- t(A) %*% B #compute cost matrix D if A is positive, each matrix entry is the multiplication between a column of A and a column of B (one entry for each combination of A and B)
   D_min <- t(-A) %*% B #compute cost matrix D  if A is negative
@@ -84,20 +83,17 @@ signperm_matrix <- function(A, B) {
 }
 
 
-#' p_values
+#' P values function
 #'
-#' Function to determine the p-values of minimal distance index based on Chi-squared
+#' Function to determine the p-values of minimal distance index based on Chi-squared. This function is used within the MCS() function
 #'
+#' @param iN Number of runs per CoP.
+#' @param dA Significance theshold.
+#' @param D_bar Vector of average distances for different CoPs.
+#' @param variance Covariance matrix of D_bar.
 #'
-#' @param iN number of runs per CoP
-#' @param dA significance theshold
-#' @param D_bar vector of average distances for different CoPs
-#' @param variance covariance matrix of D_bar
-#'
-#' @return
+#' @return List of results about the model confidence set
 #' @export
-#'
-#' @examples
 p_values <- function(iN, dA, D_bar, variance){
   #D_bar
   iM <- length(D_bar)
@@ -138,10 +134,8 @@ p_values <- function(iN, dA, D_bar, variance){
 #' @param D_bar vector of average distances for different CoPs
 #' @param variance covariance matrix of D_bar
 #'
-#' @return
+#' @return Model confidence set information
 #' @export
-#'
-#' @examples
 elim <- function(D_bar, variance){
   ind <- which.max(D_bar)
   MDI_max <- max(D_bar)
@@ -159,12 +153,10 @@ elim <- function(D_bar, variance){
 #' @param dA significance threshold
 #' @param MDI_matrix matrix of MDIs
 #' @param fun_p function to determine p-value
-#' @param fun_el elemination rule
+#' @param fun_el elimination rule
 #'
-#' @return
+#' @return Model confidence set of one lagged component.
 #' @export
-#'
-#' @examples
 MCS <- function(MDI_matrix, fun_p = p_values, fun_el = elim, dA = dA){
 
   MDI_matrix <- t(MDI_matrix)
@@ -209,13 +201,11 @@ MCS <- function(MDI_matrix, fun_p = p_values, fun_el = elim, dA = dA){
 #' Computes the minimal confidence set of list of MDI matrices
 #'
 #' @param MDI_matrix_list list of MDI matrices
-#' @param dA significance level default dA=1 selet best cop
+#' @inheritDotParams MCS -MDI_matrix
 #'
-#' @return
+#' @return List of lagged components consisting of the model confidence sets.
 #' @export
-#'
-#' @examples
-MCS_list <- function(MDI_matrix_list, dA = 1){
+MCS_list <- function(MDI_matrix_list, ...){
 
   lapply(MDI_matrix_list, function(x){
     MCS(dA = dA, MDI_matrix = x, fun_p = p_values, fun_el = elim)

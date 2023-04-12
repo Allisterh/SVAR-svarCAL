@@ -11,6 +11,9 @@ elim(D_bar, variance)
 
 \item{variance}{covariance matrix of D_bar}
 }
+\value{
+Model confidence set information
+}
 \description{
 elim
 }

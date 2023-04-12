@@ -4,27 +4,30 @@
 \alias{VAR_emp}
 \title{VAR__emp}
 \usage{
-VAR_emp(
-  data,
-  var_select,
-  lag_select,
-  season = NULL,
-  exog = NULL,
-  type = "const"
-)
+VAR_emp(data, var_select, lag_select = NULL, ...)
 }
 \arguments{
-\item{data}{Empirical data to be used}
+\item{data}{Empirical data to be used.}
 
-\item{var_select}{Variables to be compared to the model SVAR}
+\item{var_select}{Variables to be compared to the model SVAR.}
 
-\item{lag_select}{Integer for the lag order (default is p=1).}
+\item{lag_select}{Integer for the lag order. The default is NULL in which case the optimum lag is determined based on the information criterion.}
 
-\item{season}{Inlusion of centered seasonal dummy variables (integer value of frequency).}
-
-\item{exog}{Inlusion of exogenous variables.}
-
-\item{type}{Type of deterministic regressors to include.}
+\item{...}{
+  Arguments passed on to \code{\link[vars:VARselect]{vars::VARselect}}, \code{\link[vars:VAR]{vars::VAR}}
+  \describe{
+    \item{\code{lag.max}}{Integer for the highest lag order (default is
+    \code{lag.max = 10}).}
+    \item{\code{type}}{Type of deterministic regressors to include.}
+    \item{\code{season}}{Inlusion of centered seasonal dummy variables (integer
+    value of frequency).}
+    \item{\code{exogen}}{Inlusion of exogenous variables.}
+    \item{\code{ic}}{Character, selects the information criteria, if
+    \code{lag.max} is not \code{NULL}.}
+  }}
+}
+\value{
+A var estimation object.
 }
 \description{
 VAR estimation based on empirical data

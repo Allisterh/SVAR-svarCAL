@@ -2,21 +2,45 @@
 % Please edit documentation in R/module_3.R
 \name{fastICA_gen}
 \alias{fastICA_gen}
-\title{fast_ICA_general}
+\title{General fastICA function}
 \usage{
-fastICA_gen(ures, sseed = 46, maxit = 3000, tol = 1e-14, verbose = FALSE)
+fastICA_gen(ures, ...)
 }
 \arguments{
 \item{ures}{residuals of VAR model}
 
-\item{sseed}{seed}
-
-\item{maxit}{see fastICA docu}
-
-\item{tol}{see fastICA docu}
-
-\item{verbose}{see fastICA docu}
+\item{...}{
+  Arguments passed on to \code{\link[fastICA:fastICA]{fastICA::fastICA}}
+  \describe{
+    \item{\code{alg.typ}}{if \code{alg.typ == "parallel"} the components are extracted
+    simultaneously (the default). if \code{alg.typ == "deflation"} the
+    components are extracted one at a time.}
+    \item{\code{fun}}{the functional form of the \eqn{G} function used in the
+    approximation to neg-entropy (see \sQuote{details}).}
+    \item{\code{alpha}}{constant in range [1, 2] used in approximation to
+    neg-entropy when \code{fun == "logcosh"}}
+    \item{\code{method}}{if \code{method == "R"} then computations are done
+    exclusively in \R (default). The code allows the interested \R user to
+    see exactly what the algorithm does.
+    if \code{method == "C"} then C code is used to perform most of the
+    computations, which makes the algorithm run faster.  During
+    compilation the C code is linked to an optimized BLAS library if
+    present, otherwise stand-alone BLAS routines are compiled.}
+    \item{\code{row.norm}}{a logical value indicating whether rows of the data
+  matrix \code{X} should be standardized beforehand.}
+    \item{\code{maxit}}{maximum number of iterations to perform.}
+    \item{\code{tol}}{a positive scalar giving the tolerance at which the
+    un-mixing matrix is considered to have converged.}
+    \item{\code{verbose}}{a logical value indicating the level of output as the
+    algorithm runs.}
+    \item{\code{w.init}}{Initial un-mixing matrix of dimension
+    \code{c(n.comp, n.comp)}. If \code{NULL} (default) then a matrix of
+    normal r.v.'s is used.}
+  }}
+}
+\value{
+Identified model mixing matrix.
 }
 \description{
-Indentification of the mixing matrix through Indepdent component analysis alogrithm "fastICA" and ordering of matrix
+Indentification of the mixing matrix through Indepdent component analysis alogrithm "fastICA" and ordering of matrix.
 }

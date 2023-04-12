@@ -4,14 +4,21 @@
 \alias{lag_MA_components_mod}
 \title{lag_MA_components_mod}
 \usage{
-lag_MA_components_mod(var_est_model, Mixmat_model, maxlag = 5)
+lag_MA_components_mod(var_est_model, Mixmat_model, ...)
 }
 \arguments{
-\item{var_est_model}{var estimates of the model in a list of lists}
+\item{var_est_model}{List of list of VAR estimates of the model.}
 
-\item{Mixmat_model}{estimates of the model mixing matrx in a list of lists}
+\item{Mixmat_model}{List of lists of estimates of the model mixing matrix.}
 
-\item{maxlag}{number of lagged components to compute}
+\item{...}{
+  Arguments passed on to \code{\link[=lag_MA_components]{lag_MA_components}}
+  \describe{
+    \item{\code{maxlag}}{Number of lagged coefficients to compute, default is set to 5.}
+  }}
+}
+\value{
+List of lists of lists of lagged component matrices.
 }
 \description{
 Function to apply the lag_MA_components function to a list of list of model estimates

@@ -1,13 +1,11 @@
-#' resid_model
+#' Residual function of model estimated VAR
 #'
-#' Calculate the residuals based on the VAR estimate of the model data
+#' Calculate the residuals based on the VAR estimate of the model data.
 #'
-#' @param var_est VAR estimate based on model data
+#' @param var_est List of list of VAR estimates based on model data.
 #'
-#' @return
+#' @return List of lists of dataframes of residuals of VAR estimation
 #' @export
-#'
-#' @examples
 resid_model <- function(var_est) {
   var_est <- m_VAR
   residuals <-lapply(var_est, function(x){
@@ -24,49 +22,40 @@ resid_model <- function(var_est) {
   return(residuals)
 }
 
-#' fast_ICA_model
+#' Model fastICA function
 #'
-#' Indentification of the list of list model mixing matrix through Indepdent component analysis alogrithm "fastICA"
+#' Identification of the list of list model mixing matrix through Indepdent component analysis alogrithm "fastICA".
 #'
-#' @param residuals matrix of VAR residuals
-#' @param sseed seed
-#' @param tol see fastICA docu
-#' @param maxit see fastICA docu
-#' @param verbose see fastICA docu
+#' @param residuals List of lists of dataframes of VAR residuals
+#' @inheritDotParams fastICA::fastICA -X -n.comp
+
 #'
-#' @return
+#' @return list of list of identified model mixing matrices
 #' @export
-#'
-#' @examples
-fastICA_model <- function(residuals, sseed = 46, maxit=3000, tol=1e-14 , verbose=FALSE){
+fastICA_model <- function(residuals, ...){
   mix_matrix <-lapply(residuals, function(x){
-    sseed=46
     lapply(x, function(y){
       tryCatch(
-      fastICA_gen(y, sseed=46) , error = function(err) NA)
+      fastICA_gen(y,...) , error = function(err) NA)
     })
   })
   return(mix_matrix)
 }
 
 
-#' fast_ICA_general
+#' General fastICA function
 #'
-#' Indentification of the mixing matrix through Indepdent component analysis alogrithm "fastICA" and ordering of matrix
+#' Indentification of the mixing matrix through Indepdent component analysis alogrithm "fastICA" and ordering of matrix.
+#'
 #' @param ures residuals of VAR model
-#' @param sseed seed
-#' @param tol see fastICA docu
-#' @param maxit see fastICA docu
-#' @param verbose see fastICA docu
+#' @inheritDotParams fastICA::fastICA -X -n.comp
 #'
-#' @return
+#' @return Identified model mixing matrix.
 #' @export
-#'
-#' @examples
-fastICA_gen <-function(ures, sseed=46, maxit=3000, tol=1e-14 , verbose=FALSE){
+fastICA_gen <-function(ures, ...){
   set.seed(sseed)
   n<-ncol(ures)
-  icares <- fastICA(ures, ncol(ures),tol=tol, maxit=maxit, verbose=verbose) #Doris: tol=1e-14
+  icares <- fastICA(ures, ncol(ures), ...)
   A<- t(icares$A)
 
 
@@ -90,18 +79,16 @@ fastICA_gen <-function(ures, sseed=46, maxit=3000, tol=1e-14 , verbose=FALSE){
 
 
 
-#' lag_MA_components
+#' Moving average components function
 #'
-#'Function to extract the coefficients of  lagged componenets of the moving average represenetation of the VAR model
+#'Function to extract the coefficients of lagged components of the moving average representation of the VAR model.
 #'
-#' @param var_est result of estimated VAR model
-#' @param Mixmat estimated mixing matrix of contemporanous effects
-#' @param maxlag nubmer of lagged coefficient to compute
+#' @param var_est Result of estimated VAR model.
+#' @param Mixmat Estimated mixing matrix of contemporaneous effects.
+#' @param maxlag Number of lagged coefficients to compute, default is set to 5.
 #'
-#' @return
+#' @return List of laged component matrices.
 #' @export
-#'
-#' @examples
 lag_MA_components <- function(var_est, Mixmat, maxlag = 5){
   AA <- Acoef(var_est)
   k <- nrow(AA[[1]])
@@ -130,20 +117,18 @@ lag_MA_components <- function(var_est, Mixmat, maxlag = 5){
 #' lag_MA_components_mod
 #'
 #'Function to apply the lag_MA_components function to a list of list of model estimates
-#' @param var_est_model var estimates of the model in a list of lists
-#' @param Mixmat_model estimates of the model mixing matrx in a list of lists
-#' @param maxlag number of lagged components to compute
+#' @param var_est_model List of list of VAR estimates of the model.
+#' @param Mixmat_model List of lists of estimates of the model mixing matrix.
+#' @inheritDotParams lag_MA_components maxlag
 #'
-#' @return
+#' @return List of lists of lists of lagged component matrices.
 #' @export
-#'
-#' @examples
-lag_MA_components_mod <- function(var_est_model, Mixmat_model, maxlag = 5){
+lag_MA_components_mod <- function(var_est_model, Mixmat_model, ...){
   p <- (var_est_model[[1]][[1]][['p']]+1)
   result <- Map(function(a, b) {
     Map(function(c, d) {
       if (!any(is.na(d))) {
-        lag_MA_components(c, d, maxlag = maxlag)
+        lag_MA_components(c, d, ...)
       } else {
         rep(NA,p)
       }
