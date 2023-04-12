@@ -2,19 +2,22 @@
 % Please edit documentation in R/module_4.R
 \name{p_values}
 \alias{p_values}
-\title{p_values}
+\title{P values function}
 \usage{
 p_values(iN, dA, D_bar, variance)
 }
 \arguments{
-\item{iN}{number of runs per CoP}
+\item{iN}{Number of runs per CoP.}
 
-\item{dA}{significance theshold}
+\item{dA}{Significance theshold.}
 
-\item{D_bar}{vector of average distances for different CoPs}
+\item{D_bar}{Vector of average distances for different CoPs.}
 
-\item{variance}{covariance matrix of D_bar}
+\item{variance}{Covariance matrix of D_bar.}
+}
+\value{
+List of results about the model confidence set
 }
 \description{
-Function to determine the p-values of minimal distance index based on Chi-squared
+Function to determine the p-values of minimal distance index based on Chi-squared. This function is used within the MCS() function
 }
